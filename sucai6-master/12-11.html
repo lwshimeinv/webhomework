@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="animate.js"></script>
+    <link rel="stylesheet" type="text/css" href="css.css"></link>
+</head>
+<body>
+    <div class="tip" id="tip">
+        <img class="img" src="images/a15.png" alt="">
+       <div class="container">
+           <div class="alert" id="alert" style="margin-left:550px">
+           [温馨提示]最近不少不法分子在网上骗人，请注意！！
+           </div>
+       </div>
+    </div>
+    <div class="box" id="box">
+        <div class="slider" id="slider" >
+                <div class="slide"><img src="images/b5.png" alt=""></div>
+                <div class="slide"><img src="images/b1.png" alt=""></div>
+                <div class="slide"><img src="images/b2.png" alt=""></div>
+                <div class="slide"><img src="images/b3.png" alt=""></div>
+                <div class="slide"><img src="images/b4.png" alt=""></div>
+                <div class="slide"><img src="images/b5.png" alt=""></div>
+                <div class="slide"><img src="images/b1.png" alt=""></div>
+
+        </div>
+        <span id="left"><</span>
+        <span id="right">></span>
+        <ul class="nav" id="nav">
+            <li class="active">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+    </div>
+    <script>
+        var box = document.getElementById("box");
+        var oNavlist= document.getElementById("nav").children;
+        var slider = document.getElementById("slider");
+        var left = document.getElementById("left");
+        var right =document.getElementById("right");
+        var alert=document.getElementById("alert");
+        var index = 1;
+        var timer;
+        var isMoving = false;
+
+        //温馨提示
+        window.onload=function(){
+            
+            var intervalId = setInterval(function() {
+                var marginLeft = alert.style.marginLeft;
+                alert.style.marginLeft = (parseInt(marginLeft) - 1) + "px"; 
+                // console.log(marginLeft);
+                if(parseInt(marginLeft)==-400){
+                    clearInterval(intervalId);
+                    alert.style.marginLeft = 1000+"px";
+                    window.onload();
+                }
+            }, 10)
+            
+        }
+
+        
+        function next(){
+            if(!isMoving){
+                isMoving=true;
+                index++;
+                navChange();
+                animate(slider,{left:-1200*index},function(){
+                    if(index == 6){
+                        slider.style.left = "-1200px";
+                        index = 1;
+                }
+                isMoving=false;
+            });
+            }
+                  
+        }
+
+        function prev(){
+            if(!isMoving){
+                isMoving=true;
+                index--;
+                navChange();
+                animate(slider,{left:-1200*index},function(){
+                    if(index == 0){
+                        slider.style.left = "-6000px";
+                        index = 5;
+                    }
+                    isMoving=false;
+                });
+            }
+
+            
+        }
+
+        var timer = setInterval(next,3000);
+        //鼠标划入
+        box.onmouseover = function(){
+            animate(left,{opacity:50});
+            animate(right,{opacity:50});
+            clearInterval(timer);
+        }
+        //鼠标划出
+        box.onmouseout = function(){
+            animate(left,{opacity:0});
+            animate(right,{opacity:0});
+            timer = setInterval(next,3000);
+        }
+        right.onclick = next;
+        left.onclick = prev;
+        //按钮点击事件
+        for(var i=0;i<oNavlist.length;i++){
+            oNavlist[i].idx = i;
+            oNavlist[i].onclick=function(){
+                index=this.idx+1;
+                navChange();
+                animate(slider,{left:-1200*index})
+            }
+        }
+        //按钮背景色切换
+        function navChange(){
+            for(var i=0;i< oNavlist.length;i++){
+                oNavlist[i].className=" ";
+            }
+            if(index===6){
+                oNavlist[0].className = "active";
+            }else if(index==0){
+                oNavlist[4].className = 'active';  
+            }else{
+                oNavlist[index-1].className = 'active';
+
+            }
+
+        }
+
+
+    </script>
+    
+</body>
+</html>
